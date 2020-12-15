@@ -1,0 +1,83 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Speedcubing Bingo</title>
+  <meta name="description" content="Bingo generator for speedcubing">
+  <meta name="author" content="Slower Cuber">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+</head>
+
+<body>
+
+  <p>
+  This "Speedcubing Bingo" is similar to a speedrun bingo, where a bingo card is
+  randomly generated below, and a player can choose a column/row/diagonal and
+  complete the events on it.
+  </p>
+
+  <div>
+    <table id="table"></table>
+  </div>
+
+  <script>
+      const shortEvents = [
+        "skewb", "pyraminx", "Two 2x2", "Clock"
+      ];
+      const midEvents = [
+        "Two 3x3", "3x3 OH", "SQ-1"
+      ];
+      const longEvents = [
+        "5x5", "Megaminx", "Two 4x4", "3BLD", "Rescramble"
+      ];
+
+      function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min);
+      }
+
+      function sample(arr, size) {
+        let shuffle = arr.slice();
+        let arr_len = arr.length;
+        console.log(arr_len)
+        for (let i = 0; i < size; i ++) {
+          pivot = getRandomInt(i, arr_len);
+          tmp = shuffle[i];
+          shuffle[i] = shuffle[pivot];
+          shuffle[pivot] = tmp;
+        }
+        return shuffle.slice(0, size);
+      }
+
+      let sPicks = sample(shortEvents, 3);
+      let mPicks = sample(midEvents, 3);
+      let lPicks = sample(longEvents, 3);
+
+      console.log(sPicks);
+      let tableContent = {
+        columns: [
+          {field: "header", title: "DIAG \\"},
+          {field: "col1", title: "COL 1"},
+          {field: "col2", title: "COL 2"},
+          {field: "col3", title: "COL 3"}
+        ],
+        data: [
+          {header: "ROW 1", col1:sPicks[0], col2:mPicks[0], col3:lPicks[0]},
+          {header: "ROW 2", col1:mPicks[1], col2:lPicks[1], col3:sPicks[1]},
+          {header: "ROW 3", col1:lPicks[2], col2:sPicks[2], col3:mPicks[2]}
+        ]
+      }
+      $('#table').bootstrapTable(tableContent)
+  </script>
+
+</body>
+
+</html>
